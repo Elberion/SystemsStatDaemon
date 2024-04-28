@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package system_stats;
+option go_package = "./;pb";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+service SystemStat{
+  rpc Internal (CollectSettings) returns (stream SystemStats);
+}
+
+message CollectSettings {
+  google.protobuf.Duration response_interval = 1;
+  google.protobuf.Duration collect_interval = 2;
+}
+
+message SystemStats {
+  google.protobuf.Timestamp start_interval = 1;
+  google.protobuf.Timestamp end_interval = 2;
+  CPU cpu = 3;
+}
+
+message CPU{
+  float user_mode = 1;
+  float system_mode = 2;
+  float idle = 3;
+}
