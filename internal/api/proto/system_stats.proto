@@ -7,7 +7,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 service SystemStat{
-  rpc Internal (CollectSettings) returns (stream SystemStats);
+  rpc GetStat (CollectSettings) returns (stream SystemStats);
 }
 
 message CollectSettings {
@@ -19,10 +19,16 @@ message SystemStats {
   google.protobuf.Timestamp start_interval = 1;
   google.protobuf.Timestamp end_interval = 2;
   CPU cpu = 3;
+  Space space = 4;
 }
 
 message CPU{
   float user_mode = 1;
   float system_mode = 2;
   float idle = 3;
+}
+
+message Space{
+  float UsageMB = 1;
+  float UsageINode = 2;
 }

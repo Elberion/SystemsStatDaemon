@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SystemStat_Internal_FullMethodName = "/system_stats.SystemStat/Internal"
+	SystemStat_GetStat_FullMethodName = "/system_stats.SystemStat/GetStat"
 )
 
 // SystemStatClient is the client API for SystemStat service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SystemStatClient interface {
-	Internal(ctx context.Context, in *CollectSettings, opts ...grpc.CallOption) (SystemStat_InternalClient, error)
+	GetStat(ctx context.Context, in *CollectSettings, opts ...grpc.CallOption) (SystemStat_GetStatClient, error)
 }
 
 type systemStatClient struct {
@@ -37,12 +37,12 @@ func NewSystemStatClient(cc grpc.ClientConnInterface) SystemStatClient {
 	return &systemStatClient{cc}
 }
 
-func (c *systemStatClient) Internal(ctx context.Context, in *CollectSettings, opts ...grpc.CallOption) (SystemStat_InternalClient, error) {
-	stream, err := c.cc.NewStream(ctx, &SystemStat_ServiceDesc.Streams[0], SystemStat_Internal_FullMethodName, opts...)
+func (c *systemStatClient) GetStat(ctx context.Context, in *CollectSettings, opts ...grpc.CallOption) (SystemStat_GetStatClient, error) {
+	stream, err := c.cc.NewStream(ctx, &SystemStat_ServiceDesc.Streams[0], SystemStat_GetStat_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &systemStatInternalClient{stream}
+	x := &systemStatGetStatClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -52,16 +52,16 @@ func (c *systemStatClient) Internal(ctx context.Context, in *CollectSettings, op
 	return x, nil
 }
 
-type SystemStat_InternalClient interface {
+type SystemStat_GetStatClient interface {
 	Recv() (*SystemStats, error)
 	grpc.ClientStream
 }
 
-type systemStatInternalClient struct {
+type systemStatGetStatClient struct {
 	grpc.ClientStream
 }
 
-func (x *systemStatInternalClient) Recv() (*SystemStats, error) {
+func (x *systemStatGetStatClient) Recv() (*SystemStats, error) {
 	m := new(SystemStats)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (x *systemStatInternalClient) Recv() (*SystemStats, error) {
 // All implementations must embed UnimplementedSystemStatServer
 // for forward compatibility
 type SystemStatServer interface {
-	Internal(*CollectSettings, SystemStat_InternalServer) error
+	GetStat(*CollectSettings, SystemStat_GetStatServer) error
 	mustEmbedUnimplementedSystemStatServer()
 }
 
@@ -81,8 +81,8 @@ type SystemStatServer interface {
 type UnimplementedSystemStatServer struct {
 }
 
-func (UnimplementedSystemStatServer) Internal(*CollectSettings, SystemStat_InternalServer) error {
-	return status.Errorf(codes.Unimplemented, "method Internal not implemented")
+func (UnimplementedSystemStatServer) GetStat(*CollectSettings, SystemStat_GetStatServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetStat not implemented")
 }
 func (UnimplementedSystemStatServer) mustEmbedUnimplementedSystemStatServer() {}
 
@@ -97,24 +97,24 @@ func RegisterSystemStatServer(s grpc.ServiceRegistrar, srv SystemStatServer) {
 	s.RegisterService(&SystemStat_ServiceDesc, srv)
 }
 
-func _SystemStat_Internal_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _SystemStat_GetStat_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(CollectSettings)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(SystemStatServer).Internal(m, &systemStatInternalServer{stream})
+	return srv.(SystemStatServer).GetStat(m, &systemStatGetStatServer{stream})
 }
 
-type SystemStat_InternalServer interface {
+type SystemStat_GetStatServer interface {
 	Send(*SystemStats) error
 	grpc.ServerStream
 }
 
-type systemStatInternalServer struct {
+type systemStatGetStatServer struct {
 	grpc.ServerStream
 }
 
-func (x *systemStatInternalServer) Send(m *SystemStats) error {
+func (x *systemStatGetStatServer) Send(m *SystemStats) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -127,8 +127,8 @@ var SystemStat_ServiceDesc = grpc.ServiceDesc{
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "Internal",
-			Handler:       _SystemStat_Internal_Handler,
+			StreamName:    "GetStat",
+			Handler:       _SystemStat_GetStat_Handler,
 			ServerStreams: true,
 		},
 	},

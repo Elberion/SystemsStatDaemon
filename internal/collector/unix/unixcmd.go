@@ -1,0 +1,5 @@
+package unix
+
+func GetCPU() {
+
+}

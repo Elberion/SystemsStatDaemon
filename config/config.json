@@ -1,0 +1,11 @@
+{
+  "Config": {
+    "interval": "P1S",
+    "cpu": true,
+    "space": false,
+    "grpc": {
+      "port": "50050",
+      "timeout": "P12H"
+    }
+  }
+}
