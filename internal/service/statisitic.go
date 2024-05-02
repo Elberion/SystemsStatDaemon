@@ -17,7 +17,7 @@ type StatisticService struct {
 
 	statistic *Statistic
 	interval  time.Duration
-	cfg       *cfg.Config
+	cfg       cfg.Config
 }
 
 func (s *StatisticService) GetStat(cs *pb.CollectSettings, srv pb.SystemStat_GetStatServer) error {
@@ -25,12 +25,12 @@ func (s *StatisticService) GetStat(cs *pb.CollectSettings, srv pb.SystemStat_Get
 	return nil
 }
 
-func NewService(ctx *context.Context, cfg *cfg.Config) *StatisticService {
+func NewService(ctx context.Context, cfg cfg.Config) *StatisticService {
 	srv := &StatisticService{
 		statistic: NewStorageStat(),
 		interval:  defaultCollectInterval,
 		cfg:       cfg,
 	}
-	//go srv.statistic.StartCollect(ctx, cfg)
+	go srv.statistic.StartCollect(ctx, cfg)
 	return srv
 }

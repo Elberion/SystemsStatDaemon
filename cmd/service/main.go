@@ -35,7 +35,7 @@ func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	pb.RegisterSystemStatServer(grpcServer, service.NewService(&ctx, cfg))
+	pb.RegisterSystemStatServer(grpcServer, service.NewService(ctx, cfg))
 
 	if err := grpcServer.Serve(lsn); err != nil {
 		log.Fatal(err)
