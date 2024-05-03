@@ -33,6 +33,7 @@ func GetCPU() *pb.CPU {
 }
 
 func GetSpace() *pb.Space {
+	// Get-CimInstance win32_logicaldisk
 	space := pb.Space{
 		UsageMB:    2514.5,
 		UsageINode: 100,

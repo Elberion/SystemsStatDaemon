@@ -29,6 +29,13 @@ message CPU{
 }
 
 message Space{
-  float UsageMB = 1;
-  float UsageINode = 2;
+  repeated Drive Drivers = 1;
+}
+
+message Drive{
+  string Caption = 1;
+  float TotalMB = 2;
+  float UsageMB = 3;
+  float TotalINode = 4;
+  float UsageINode = 5;
 }
